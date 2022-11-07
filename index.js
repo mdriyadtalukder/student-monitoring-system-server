@@ -25,6 +25,40 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 async function run() {
     try {
         await client.connect();
+        const userCollection = client.db('allusers').collection('users');
+        const infoCollection = client.db('allinfo').collection('info');
+
+        //user create
+        app.post('/users', async (req, res) => {
+            const user = req.body;
+            const result = userCollection.insertOne(user);
+            res.send(result);
+        })
+
+        //user get
+        app.get('/users', async (req, res) => {
+            const query = {};
+            const cursor = userCollection.find(query);
+            const users = await cursor.toArray();
+            res.send(users)
+        })
+
+        //info create
+        app.post('/info', async (req, res) => {
+            const user = req.body;
+            const result = infoCollection.insertOne(user);
+            res.send(result);
+        })
+
+        //info get by email
+        app.get('/info', async (req, res) => {
+            const email = req.query.email;
+            const query = { email: email }
+            const cursor = infoCollection.find(query);
+            const emails = await cursor.toArray();
+            res.send(emails);
+        })
+
 
     } finally {
 
