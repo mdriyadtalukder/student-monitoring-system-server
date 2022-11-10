@@ -29,6 +29,52 @@ async function run() {
         const infoCollection = client.db('allinfo').collection('info');
         const cmCollection = client.db('coursemarks').collection('cm');
 
+
+
+        //info get
+        app.get('/info', async (req, res) => {
+            const users = await infoCollection.find().toArray();
+            res.send(users);
+
+        })
+
+        //info get by email
+        app.get('/info/:email', async (req, res) => {
+            const email = req.params.email;
+            const query = { email: email };
+            const result = await infoCollection.findOne(query);
+            res.send(result);
+        });
+
+        //my profile update
+
+        app.put('/info/:email', async (req, res) => {
+            const email = req.params.email;
+            const user = req.body;
+            const filter = { email: email };
+            const options = { upsert: true };
+            const updateDoc = {
+                $set: {
+                    name: user.name,
+                    fName: user.fName,
+                    mName: user.mName,
+                    geender: user.geender,
+                    contactN: user.contactN,
+                    cAddress: user.cAddress,
+                    pAddress: user.pAddress,
+                    email: user.email,
+                    bDay: user.bDay,
+                },
+
+            };
+
+            const result = await infoCollection.updateOne(filter, updateDoc, options);
+            res.send(result);
+
+        });
+
+
+
         //user create
         app.post('/users', async (req, res) => {
             const user = req.body;
@@ -54,21 +100,6 @@ async function run() {
 
         })
 
-        //info create
-        app.post('/info', async (req, res) => {
-            const user = req.body;
-            const result = infoCollection.insertOne(user);
-            res.send(result);
-        })
-
-        //info get by email
-        app.get('/info/:email', async (req, res) => {
-            const id = req.params.email;
-            console.log(req.body)
-            const query = { email: id };
-            const result = await infoCollection.findOne(query);
-            res.send(result);
-        });
 
         //course or marks create
         app.post('/cms', async (req, res) => {
@@ -116,32 +147,7 @@ async function run() {
             res.send(result)
         });
 
-        //my profile update
 
-        app.put('/info/:email', async (req, res) => {
-            const email = req.params.email;
-            const user = req.body;
-            const filter = { email: email };
-            const options = { upsert: true };
-            const updateDoc = {
-                $set: {
-                    name: user.name,
-                    fName: user.fName,
-                    mName: user.mName,
-                    geender: user.geender,
-                    contactN: user.contactN,
-                    cAddress: user.cAddress,
-                    pAddress: user.pAddress,
-                    email: user.email,
-                    bDay: user.bDay,
-                },
-
-            };
-
-            const result = await infoCollection.updateOne(filter, updateDoc, options);
-            res.send(result);
-
-        });
 
 
 
