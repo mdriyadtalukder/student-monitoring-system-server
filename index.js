@@ -29,6 +29,7 @@ async function run() {
         const infoCollection = client.db('allinfo').collection('info');
         const cmCollection = client.db('coursemarks').collection('cm');
         const atcCollection = client.db('attend').collection('atd');
+        const fdbkCollection = client.db('feedback').collection('fdbck');
 
 
 
@@ -161,6 +162,22 @@ async function run() {
             const users = await cursor.toArray();
             res.send(users)
         })
+
+        //feedback
+
+        app.post('/fdb', async (req, res) => {
+            const user = req.body;
+            const result = fdbkCollection.insertOne(user);
+            res.send(result);
+        })
+
+        app.get('/fdb', async (req, res) => {
+            const query = {};
+            const cursor = fdbkCollection.find(query);
+            const users = await cursor.toArray();
+            res.send(users)
+        })
+
 
 
 
