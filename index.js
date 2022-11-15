@@ -28,6 +28,7 @@ async function run() {
         const userCollection = client.db('allusers').collection('users');
         const infoCollection = client.db('allinfo').collection('info');
         const cmCollection = client.db('coursemarks').collection('cm');
+        const atcCollection = client.db('attend').collection('atd');
 
 
 
@@ -147,6 +148,11 @@ async function run() {
             res.send(result)
         });
 
+        app.post('/atc', async (req, res) => {
+            const user = req.body;
+            const result = atcCollection.insertOne(user);
+            res.send(result);
+        })
 
 
 
