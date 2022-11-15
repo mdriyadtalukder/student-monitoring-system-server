@@ -102,6 +102,15 @@ async function run() {
 
         })
 
+        //Admin
+        app.get('/admin/:email', async (req, res) => {
+            const email = req.params.email;
+            const user = await userCollection.findOne({ email: email });
+            const isAdmin = user.role === 'Admin';
+            res.send({ admin: isAdmin });
+        })
+
+
 
         //course or marks create
         app.post('/cms', async (req, res) => {
@@ -177,9 +186,6 @@ async function run() {
             const users = await cursor.toArray();
             res.send(users)
         })
-
-
-
 
 
 
