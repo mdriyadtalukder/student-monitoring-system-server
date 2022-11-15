@@ -148,10 +148,18 @@ async function run() {
             res.send(result)
         });
 
+        // attedence 
         app.post('/atc', async (req, res) => {
             const user = req.body;
             const result = atcCollection.insertOne(user);
             res.send(result);
+        })
+
+        app.get('/atc', async (req, res) => {
+            const query = {};
+            const cursor = atcCollection.find(query);
+            const users = await cursor.toArray();
+            res.send(users)
         })
 
 
